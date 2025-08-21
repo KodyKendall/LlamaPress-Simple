@@ -1,0 +1,110 @@
+services:
+  llamapress:
+    # image: kody06/llamapress:0.1.16
+    build:
+      context: .
+      dockerfile: Dockerfile
+    stdin_open: true     # <-- enables byebug/irb input
+    tty: true             # <-- attaches terminal output
+    env_file:
+      - .env
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails db:prepare && bundle exec rails s -b '0.0.0.0'"
+    platform: linux/amd64       # ← tells Compose “run this container as amd64 under QEMU”
+    # volumes:
+    #   - ./app:/rails/app:delegated
+    #   - ./config/routes.rb:/rails/config/routes.rb:delegated    # mount just one file
+    #   - ./db:/rails/db:delegated                               # mount entire db folder
+    ports:
+      - "3000:3000"
+    networks:
+      - llama-network
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_URL=postgres://user:password@db:5432/llamapress
+      - BUNDLE_PATH=/usr/local/bundle
+      - REDIS_URL=redis://redis:6379/1
+      - BOOTSNAP_CACHE_DIR=/rails/tmp/cache/bootsnap
+    depends_on:
+      - db
+      - redis
+
+  llamabot:
+    image: kody06/llamabot:0.1.16
+    # build: 
+    #   context: LlamaBot
+    #   dockerfile: Dockerfile
+    # volumes:
+    #   - ./app:/app/app/rails/app
+    #   - ./config/routes.rb:/app/app/rails/config/routes.rb    # mount just one file
+    #   - ./db:/app/app/rails/db                               # mount entire db folder
+    #   - ./LlamaBot/app:/app/app
+    #   - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - .env
+    environment:
+      - DB_URI=postgres://user:password@db:5432/llamapress
+      - GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+    command: bash -c "python init_pg_checkpointer.py --uri $$DB_URI && uvicorn main:app --host 0.0.0.0 --port 8000"
+    # command: >
+    #   bash -c "
+    #     python init_pg_checkpointer.py --uri $$DB_URI
+    #     tail -f /dev/null
+    #   "
+    # NOTE: The tail -f /dev/null is a hack to keep the container running.
+    
+    # It's not a good idea to do this in production.
+    # But it's useful for debugging.
+    # Then, once the container is running, we docker compose exec llamabot bash, and we can run fastapi and get the debugger to work.
+
+    # Command to run after this container is running.
+    
+    # docker compose exec -it llamabot bash
+    # python -Xfrozen_modules=off -m uvicorn main:app --host 0.0.0.0 --port 8000
+    
+    # Original command:
+    # bash -c "
+    #   python init_pg_checkpointer.py --uri $$DB_URI &&
+    #   uvicorn main:app --host 0.0.0.0 --port 8000 --workers 1
+    # "
+
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+    depends_on: 
+      - db
+    networks:
+      - llama-network
+
+  db:
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: llamapress
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    networks:
+      - llama-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    networks:
+      - llama-network
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+  bundle_cache:
+  bootsnap_cache: 
+
+# Declare the external network
+networks:
+  llama-network:
+    name: llama-network
