@@ -19,7 +19,11 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <main class="container mx-auto mt-28 px-5 flex flex-col">
+      <nav class="flex justify-between items-center">
+        <%= link_to "Home", root_path, class: "p-5 text-blue-500 hover:text-blue-600" %>
+        <%= link_to "Users", users_path, class: "p-5 text-blue-500 hover:text-blue-600" %> 
+      </nav>
       <%= yield %>
     </main>
   </body>
