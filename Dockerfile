@@ -28,9 +28,9 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt \
       curl \
       postgresql-client \
       nodejs \
+      watchman \
       npm --fix-missing && \
     apt-get clean
-
 
 # Configure npm
 RUN npm config set fund false --global
@@ -54,7 +54,7 @@ RUN bundle install
 # Expose port 3000
 EXPOSE 3000
 
-CMD ["bundle", "exec", "rails", "db:prepare"]
+# Prepare database and start the Rails server
+CMD ["sh", "-c", "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"]
 
-# Start the Rails server
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+#   docker buildx build --file Dockerfile --platform linux/amd64 --tag kody06/llamapress-simple:0.1.17 --push .
