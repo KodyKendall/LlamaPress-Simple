@@ -5,7 +5,7 @@ require 'uri'
 require 'base64'
 require 'tempfile'
 
-class OpenAI
+class OpenAi
   OPENAI_API_URL = "https://api.openai.com/v1"
 
   def initialize(api_key: ENV["OPENAI_API_KEY"])
@@ -15,17 +15,32 @@ class OpenAI
   # === Generate Image ===
   # Example:
   #   OpenAI.new.generate_image("a purple llama", attach_to: user, attachment_name: :avatar)
-  def generate_image(prompt, size: "512x512", attach_to: nil, attachment_name: nil)
+  def generate_image(prompt, size: "1024x1024", attach_to: nil, attachment_name: nil)
     uri = URI("#{OPENAI_API_URL}/images/generations")
     req = Net::HTTP::Post.new(uri, headers)
-    req.body = { model: "gpt-image-1", prompt: prompt, size: size }.to_json
+    req.body = { model: "dall-e-3", prompt: prompt, size: size, response_format: "b64_json" }.to_json
 
     res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
     raise "Image generation failed: #{res.code} #{res.body}" unless res.is_a?(Net::HTTPSuccess)
 
     data = JSON.parse(res.body)
+
+    if (error = data["error"]) && error["message"]
+      raise "OpenAI error: #{error["message"]}"
+    end
+
     image_b64 = data.dig("data", 0, "b64_json")
-    file = write_tempfile(Base64.decode64(image_b64), "png")
+    image_content = nil
+
+    if image_b64 && !image_b64.empty?
+      image_content = Base64.decode64(image_b64)
+    else
+      image_url = data.dig("data", 0, "url")
+      raise "No image returned by OpenAI" unless image_url
+      image_content = download_binary(image_url)
+    end
+
+    file = write_tempfile(image_content, "png")
 
     if attach_to && attachment_name
       attach_to.public_send(attachment_name).attach(io: file, filename: "openai.png", content_type: "image/png")
@@ -76,6 +91,13 @@ class OpenAI
     file.write(content)
     file.rewind
     file
+  end
+
+  def download_binary(url)
+    uri = URI(url)
+    response = Net::HTTP.get_response(uri)
+    raise "Image download failed: #{response.code} #{response.body}" unless response.is_a?(Net::HTTPSuccess)
+    response.body
   end
 end
 

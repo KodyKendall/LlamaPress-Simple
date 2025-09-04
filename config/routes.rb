@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'users/registrations' }
-  resources :users
+  resources :users do
+    member do
+      get :generate_profile_pic, action: :generate_profile_pic_form
+      post :generate_profile_pic
+    end
+  end
   mount LlamaBotRails::Engine => "/llama_bot"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

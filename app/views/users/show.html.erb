@@ -7,7 +7,15 @@
 
   <h1 class="font-bold text-4xl">Showing user</h1>
 
+  <% if @user.profile_pic.attached? %>
+    <div class="mb-4">
+      <img src="<%= url_for(@user.profile_pic) %>" alt="Profile Picture" class="w-32 h-32 rounded-full object-cover border" />
+    </div>
+  <% end %>
+
   <%= render @user %>
+
+  <%= link_to "Generate AI Image for your Profile", generate_profile_pic_user_path(@user), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium inline-block mb-4" %>
 
   <%= link_to "Edit this user", edit_user_path(@user), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
   <%= link_to "Back to users", users_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>

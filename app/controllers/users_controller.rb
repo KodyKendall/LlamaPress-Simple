@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
-    @users = User.all
+    @users = [current_user]
   end
 
   # GET /users/1 or /users/1.json
@@ -57,10 +57,41 @@ class UsersController < ApplicationController
     end
   end
 
+  # POST /users/:id/generate_profile_pic
+  def generate_profile_pic
+    @user = User.find(params[:id])
+    description = params[:profile_pic_description]
+    if description.present?
+      begin
+        OpenAi.new.generate_image(description, attach_to: @user, attachment_name: :profile_pic)
+        respond_to do |format|
+          format.html { redirect_to @user, notice: "Profile picture generated!", status: :see_other }
+          format.turbo_stream { redirect_to @user, notice: "Profile picture generated!", status: :see_other }
+        end
+      rescue => e
+        Rails.logger.error("Error generating profile picture from OpenAI: #{e.message}")
+        respond_to do |format|
+          format.html { redirect_to user_path(@user), alert: "Failed to generate image: #{e.message}", status: :see_other }
+          format.turbo_stream { redirect_to user_path(@user), alert: "Failed to generate image: #{e.message}", status: :see_other }
+        end
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to user_path(@user), alert: "Description can't be blank.", status: :see_other }
+        format.turbo_stream { redirect_to user_path(@user), alert: "Description can't be blank.", status: :see_other }
+      end
+    end
+  end
+
+  # GET /users/:id/generate_profile_pic
+  def generate_profile_pic_form
+    @user = current_user
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.find(params[:id])
+      @user = current_user
     end
 
     # Only allow a list of trusted parameters through.
