@@ -13,6 +13,17 @@
     </div>
   <% end %>
 
+  <% if @user.bio_audio.attached? %>
+    <div class="mb-4">
+      <audio controls>
+        <source src="<%= url_for(@user.bio_audio) %>" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  <% end %>
+
+  <%= link_to "Generate Audio Bio for your Profile", generate_bio_audio_user_path(@user), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium inline-block mb-4" %>
+
   <%= render @user %>
 
   <%= link_to "Generate AI Image for your Profile", generate_profile_pic_user_path(@user), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium inline-block mb-4" %>

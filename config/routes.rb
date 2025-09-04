@@ -4,6 +4,8 @@ Rails.application.routes.draw do
     member do
       get :generate_profile_pic, action: :generate_profile_pic_form
       post :generate_profile_pic
+      get :generate_bio_audio, action: :generate_bio_audio_form
+      post :generate_bio_audio
     end
   end
   mount LlamaBotRails::Engine => "/llama_bot"

@@ -88,6 +88,37 @@ class UsersController < ApplicationController
     @user = current_user
   end
 
+  # GET /users/:id/generate_bio_audio
+  def generate_bio_audio_form
+    @user = current_user
+  end
+
+  # POST /users/:id/generate_bio_audio
+  def generate_bio_audio
+    @user = User.find(params[:id])
+    bio_text = params[:bio_text]
+    if bio_text.present?
+      begin
+        OpenAi.new.generate_audio(bio_text, attach_to: @user, attachment_name: :bio_audio)
+        respond_to do |format|
+          format.html { redirect_to @user, notice: "Bio audio generated!", status: :see_other }
+          format.turbo_stream { redirect_to @user, notice: "Bio audio generated!", status: :see_other }
+        end
+      rescue => e
+        Rails.logger.error("Error generating bio audio from OpenAI: #{e.message}")
+        respond_to do |format|
+          format.html { redirect_to user_path(@user), alert: "Failed to generate audio: #{e.message}", status: :see_other }
+          format.turbo_stream { redirect_to user_path(@user), alert: "Failed to generate audio: #{e.message}", status: :see_other }
+        end
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to user_path(@user), alert: "Bio can't be blank.", status: :see_other }
+        format.turbo_stream { redirect_to user_path(@user), alert: "Bio can't be blank.", status: :see_other }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
