@@ -1,6 +1,6 @@
 services:
   llamapress:
-    # image: kody06/llamapress:0.1.16
+    # image: kody06/llamapress-simple:0.1.18
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,7 +10,8 @@ services:
       - .env
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails db:prepare && bundle exec rails s -b '0.0.0.0'"
     platform: linux/amd64       # ← tells Compose “run this container as amd64 under QEMU”
-    # volumes:
+    volumes:
+    - rails_app:/rails
     #   - ./app:/rails/app:delegated
     #   - ./config/routes.rb:/rails/config/routes.rb:delegated    # mount just one file
     #   - ./db:/rails/db:delegated                               # mount entire db folder
@@ -29,7 +30,7 @@ services:
       - redis
 
   llamabot:
-    image: kody06/llamabot:0.1.16
+    image: kody06/llamabot:0.2.6
     # build: 
     #   context: LlamaBot
     #   dockerfile: Dockerfile
@@ -103,6 +104,7 @@ volumes:
   redis_data:
   bundle_cache:
   bootsnap_cache: 
+  rails_app:
 
 # Declare the external network
 networks:

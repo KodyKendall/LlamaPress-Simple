@@ -33,9 +33,6 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
-# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
-
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -65,3 +62,9 @@ gem "byebug", "~> 12.0", groups: [:development, :test]
 gem "devise", "~> 4.9"
 
 gem "dotenv-rails", "~> 3.1"
+
+gem "twilio-ruby", "~> 7.6"
+gem "plaid-ruby", "~> 0.1.2"
+gem "stripe", "~> 15.5"
+
+gem "image_processing", "~> 1.14"

@@ -5,4 +5,9 @@ class PublicController < ApplicationController
     # GET /
     def home
     end
+
+    # Chat page of our application.
+    # GET /chat
+    def chat
+    end
   end

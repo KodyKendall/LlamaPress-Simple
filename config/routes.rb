@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   root "public#home"
   get "home" => "public#home"
+  get "chat" => "public#chat"
 
   # Defines the root path route ("/")
   # root "posts#index"
