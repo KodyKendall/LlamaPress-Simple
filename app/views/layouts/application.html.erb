@@ -70,13 +70,14 @@
               </div>
               <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
                 <%= link_to "Home", root_path, class: "inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900" %>
+                <%= link_to "Chat with AI", "/chat", class: "inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-900 hover:border-indigo-500 hover:text-indigo-700" %>
               </div>
             </div>
             <div class="hidden sm:ml-6 sm:flex sm:items-center">
               <% if user_signed_in? %>
                 <%= link_to user_path(current_user), class: "inline-flex items-center justify-center rounded-full h-9 w-9 text-gray-500 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" do %>
                   <span class="sr-only">Your profile</span>
-                  <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5a7.5 7.5 0 1115 0v.75a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75v-.75z" />
                   </svg>
@@ -102,6 +103,7 @@
         <div class="sm:hidden" id="mobile-menu" data-menu-target="mobileMenu">
           <div class="space-y-1 pb-3 pt-2">
             <%= link_to "Home", root_path, class: "block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700" %>
+            <%= link_to "Chat with AI", "/chat", class: "block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700" %>
             <% if user_signed_in? %>
               <%= link_to "Profile", user_path(current_user), class: "block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700" %>
             <% else %>
