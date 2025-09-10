@@ -2,7 +2,7 @@
 #
 # Customize the params sent to your LangGraph agent here.
 # Uncomment the line in the initializer to activate this builder.
-module RailsBasic
+class AgentStateBuilder
   def initialize(params:, context:)
     @params = params
     @context = context
