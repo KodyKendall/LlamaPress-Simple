@@ -110,7 +110,9 @@
         console.log("LLM Response:", parsedData);
         switch (parsedData.type) {
           case "AIMessageChunk":
-            addMessage(parsedData.content, parsedData.type, parsedData.base_message);
+            //NOTE: DISABLE AI Message Chunk for now so that we don't double add messages on accident.
+            //addMessage(parsedData.content, parsedData.type, parsedData.base_message);
+            break;
           case "ai":
             addMessage(parsedData.content, parsedData.type, parsedData.base_message);
             break;
@@ -435,64 +437,16 @@
         let tool_call = base_message.additional_kwargs.tool_calls[0];
         let function_name = tool_call.function.name;
         let function_arguments = JSON.parse(tool_call.function.arguments);
-        
-        if (function_name === 'run_rails_console_command') {
-          let rails_console_command = function_arguments.rails_console_command;
-          let message_to_user = function_arguments.message_to_user;
-          let internal_thoughts = function_arguments.internal_thoughts;
-
-          messageDiv.innerHTML = `
-            <div class="bg-white border border-gray-200 rounded-lg p-4 max-w-[80%] shadow-sm">
-              <!-- Main action message -->
-              <div class="mb-3">
-                <div class="flex items-center mb-2">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-500 mr-2">
-                    <path d="M9 12l2 2 4-4"/>
-                    <circle cx="12" cy="12" r="10"/>
-                  </svg>
-                  <span class="font-medium text-gray-700">LlamaBot</span>
-                </div>
-                <div class="text-gray-800">${message_to_user}</div>
-              </div>
-
-              <!-- Internal reasoning -->
-              <div class="mb-3 bg-gray-50 p-3 rounded-md">
-                <div class="flex items-center mb-2">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-500 mr-2">
-                    <circle cx="12" cy="12" r="5"/>
-                    <path d="M12 1v6"/>
-                    <path d="M12 17v6"/>
-                    <path d="M4.22 4.22l4.24 4.24"/>
-                    <path d="M15.54 15.54l4.24 4.24"/>
-                    <path d="M1 12h6"/>
-                    <path d="M17 12h6"/>
-                    <path d="M4.22 19.78l4.24-4.24"/>
-                    <path d="M15.54 8.46l4.24-4.24"/>
-                  </svg>
-                  <span class="font-medium text-gray-600 text-sm">Reasoning</span>
-                </div>
-                <div class="text-gray-600 text-sm">${internal_thoughts}</div>
-              </div>
-
-              <!-- Command execution -->
-              <div class="bg-gray-800 text-gray-200 p-3 rounded-md font-mono text-sm overflow-x-auto">
-                <div>
-                  <span class="text-green-400">$</span> <code>${rails_console_command.replace(/;/g, ';<br>')}</code>
-                </div>
-              </div>
+       
+        messageDiv.innerHTML = `
+          <div class="bg-white border border-gray-200 rounded-lg p-4 max-w-[80%]">
+            <div class="flex items-center mb-2">
+              <span class="text-gray-500 mr-2">🔨</span>
+              <span class="font-medium">${function_name}</span>
             </div>
-          `;
-        } else {
-          messageDiv.innerHTML = `
-            <div class="bg-white border border-gray-200 rounded-lg p-4 max-w-[80%]">
-              <div class="flex items-center mb-2">
-                <span class="text-gray-500 mr-2">🔨</span>
-                <span class="font-medium">${function_name}</span>
-              </div>
-              <pre class="bg-gray-100 p-2 rounded text-sm overflow-x-auto">${JSON.stringify(function_arguments, null, 2)}</pre>
-            </div>
-          `;
-        }
+            <pre class="bg-gray-100 p-2 rounded text-sm overflow-x-auto">${JSON.stringify(function_arguments, null, 2)}</pre>
+          </div>
+        `;
       } else {
         messageDiv.innerHTML = `
           <div class="bg-white border border-gray-200 rounded-lg py-2 px-4 max-w-[80%] shadow-sm">
