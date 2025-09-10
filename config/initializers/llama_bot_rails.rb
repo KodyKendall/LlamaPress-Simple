@@ -9,7 +9,7 @@ Rails.application.configure do
   # The gem uses `LlamaBotRails::AgentStateBuilder` by default.
   # Uncomment this line to use the builder in app/llama_bot/
   #
-  # config.llama_bot_rails.state_builder_class = "RailsBasic::AgentStateBuilder"
+  config.llama_bot_rails.state_builder_class = "AgentStateBuilder"
 
   # ------------------------------------------------------------------------
   # Custom User Resolver
