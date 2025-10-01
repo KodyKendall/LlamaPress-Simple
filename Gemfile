@@ -65,6 +65,6 @@ gem "dotenv-rails", "~> 3.1"
 
 gem "twilio-ruby", "~> 7.6"
 gem "plaid-ruby", "~> 0.1.2"
-gem "stripe", "~> 15.5"
+gem "stripe", "~> 16.0"
 
 gem "image_processing", "~> 1.14"
