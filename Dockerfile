@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4
-ARG TARGETPLATFORM=linux/amd64
+# ARG TARGETPLATFORM=linux/amd64
 FROM --platform=${TARGETPLATFORM} ruby@sha256:bceec7582aaa80630bb51a04e2df3af658e64c0640c174371776928ad3bd57b4
 
 # freeze snapshot
@@ -57,4 +57,4 @@ EXPOSE 3000
 # Prepare database and start the Rails server
 CMD ["sh", "-c", "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"]
 
-#   docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64 --tag kody06/llamapress-simple:0.2.2 --push .
+#   docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64 --tag kody06/llamapress-simple:0.2.4 --push .

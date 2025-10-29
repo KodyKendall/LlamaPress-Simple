@@ -68,3 +68,5 @@ gem "plaid-ruby", "~> 0.1.2"
 gem "stripe", "~> 15.5"
 
 gem "image_processing", "~> 1.14"
+
+gem "aws-sdk-s3"
