@@ -42,6 +42,14 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+  
+  gem "rubocop", require: false
+  gem "rubocop-rspec", require: false
+  gem "rspec-rails", "~> 7.0"
+  gem "factory_bot_rails", "~> 6.4"
+  gem "faker", "~> 3.5"
+  gem "simplecov", require: false
+  gem "byebug", "~> 12.0"
 end
 
 group :development do
@@ -52,12 +60,15 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
-  gem "selenium-webdriver"
+  gem 'cuprite'
+  gem "database_cleaner-active_record", "~> 2.2"
+  gem "mutant-rspec"
+  gem "prop_check"
+  gem "pact"
+  gem "rspec-snapshot", require: false
 end
 
 gem "llama_bot_rails", "~> 0.1.16"
-
-gem "byebug", "~> 12.0", groups: [:development, :test]
 
 gem "devise", "~> 4.9"
 

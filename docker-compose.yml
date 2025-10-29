@@ -9,9 +9,11 @@ services:
     env_file:
       - .env
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails db:prepare && bundle exec rails s -b '0.0.0.0'"
+    # command: tail -f /dev/null
     platform: linux/amd64       # ← tells Compose “run this container as amd64 under QEMU”
     volumes:
-    - rails_app:/rails
+      - .:/rails
+      # - bundle_cache:/usr/local/bundle  # Persist gems across container restarts
     #   - ./app:/rails/app:delegated
     #   - ./config/routes.rb:/rails/config/routes.rb:delegated    # mount just one file
     #   - ./db:/rails/db:delegated                               # mount entire db folder
@@ -30,7 +32,7 @@ services:
       - redis
 
   llamabot:
-    image: kody06/llamabot:0.2.6
+    image: kody06/llamabot:0.2.19-memory-efficienta
     # build: 
     #   context: LlamaBot
     #   dockerfile: Dockerfile
@@ -102,7 +104,6 @@ services:
 volumes:
   postgres_data:
   redis_data:
-  bundle_cache:
   bootsnap_cache: 
   rails_app:
 

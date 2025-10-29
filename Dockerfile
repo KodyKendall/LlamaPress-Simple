@@ -42,14 +42,23 @@ ENV RAILS_ENV="development" \
     BUNDLE_PATH="/usr/local/bundle" \
     BOOTSNAP_CACHE_DIR="/rails/tmp/cache/bootsnap"
 
-# Copy Gemfiles
+# Copy Gemfiles and vendor gems for better caching
 COPY Gemfile Gemfile.lock ./
+COPY vendor/ vendor/
 
-# Copy application code
+# Install gems directly into the image
+RUN bundle install && \
+    bundle clean --force
+
+# Copy package files for Node.js dependencies
+COPY package.json package*.json ./
+RUN npm ci 2>/dev/null || npm install
+
+# Create directories that might be needed
+RUN mkdir -p tmp/cache/bootsnap tmp/pids log
+
+# Copy application code (this should be LAST to maximize cache hits)
 COPY . .
-
-# Install gems
-RUN bundle install
 
 # Expose port 3000
 EXPOSE 3000
