@@ -1,0 +1,55 @@
+<h2>🚀 Version 0.2.4</h2>
+
+<h3>✨ What's New</h3>
+
+<table>
+<tr>
+<td width="50px">☁️</td>
+<td>
+<strong>AWS S3 Support</strong><br>
+Added <code>aws-sdk-s3</code> gem to enable S3 storage for file uploads. This allows the application to store uploaded files in AWS S3 instead of the local filesystem, providing scalable and reliable cloud storage.
+</td>
+</tr>
+<tr>
+<td>🤖</td>
+<td>
+<strong>Default Agent Update</strong><br>
+Changed the default agent from "llamabot" to "leo". The agent system is now more streamlined with "leo" as the primary agent for interactions.
+</td>
+</tr>
+<tr>
+<td>🧹</td>
+<td>
+<strong>Code Cleanup</strong><br>
+Simplified agent configuration structure by removing the unnecessary <code>RailsBasic</code> module wrapper and moving <code>AgentStateBuilder</code> to a top-level class. This makes the codebase cleaner and easier to maintain.
+</td>
+</tr>
+<tr>
+<td>🐳</td>
+<td>
+<strong>Docker Improvements</strong><br>
+Enhanced multi-platform build support (ARM64/x86_64) by making the Docker build configuration more flexible. Removed hardcoded platform arguments to support both Apple Silicon and Intel architectures.
+</td>
+</tr>
+<tr>
+<td>📝</td>
+<td>
+<strong>Documentation</strong><br>
+Added dev notes tracking system in <code>docs/</code> folder to maintain better records of changes across releases.
+</td>
+</tr>
+</table>
+
+<h3>🔧 Technical Details</h3>
+
+<ul>
+<li>Added AWS S3 integration for Active Storage via <code>aws-sdk-s3</code> gem</li>
+<li>Refactored <code>AgentStateBuilder</code> to top-level class structure</li>
+<li>Enabled custom state builder in Rails initializer (<code>config/initializers/llama_bot_rails.rb</code>)</li>
+<li>Updated Dockerfile for flexible platform builds</li>
+<li>Set "leo" as the default agent name throughout the application</li>
+</ul>
+
+<hr>
+
+<p><strong>Full Changelog</strong>: <code>719ded2...19867b8</code></p>
