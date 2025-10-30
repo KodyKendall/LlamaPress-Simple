@@ -38,3 +38,5 @@
 !/app/assets/builds/.keep
 
 /coverage/
+
+/node_modules/

@@ -29,7 +29,31 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt \
       postgresql-client \
       nodejs \
       watchman \
-      npm --fix-missing && \
+      npm \
+      chromium \
+      chromium-driver \
+      libgbm1 \
+      libasound2 \
+      libatk-bridge2.0-0 \
+      libatk1.0-0 \
+      libatspi2.0-0 \
+      libcups2 \
+      libdbus-1-3 \
+      libdrm2 \
+      libglib2.0-0 \
+      libnspr4 \
+      libnss3 \
+      libwayland-client0 \
+      libx11-6 \
+      libxcb1 \
+      libxcomposite1 \
+      libxdamage1 \
+      libxext6 \
+      libxfixes3 \
+      libxkbcommon0 \
+      libxrandr2 \
+      xdg-utils \
+      --fix-missing && \
     apt-get clean
 
 # Configure npm
@@ -67,3 +91,4 @@ EXPOSE 3000
 CMD ["sh", "-c", "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"]
 
 #   docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64 --tag kody06/llamapress-simple:0.2.4 --push .
+# 

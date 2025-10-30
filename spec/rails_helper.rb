@@ -14,7 +14,19 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 Capybara.register_driver(:cuprite) do |app|
-  Capybara::Cuprite::Driver.new(app, window_size: [1400, 1400], browser_options: { 'no-sandbox' => nil })
+  Capybara::Cuprite::Driver.new(
+    app,
+    window_size: [1400, 1400],
+    browser_options: {
+      'no-sandbox' => nil,
+      'disable-gpu' => nil,
+      'disable-dev-shm-usage' => nil
+    },
+    process_timeout: 30,
+    timeout: 15,
+    inspector: ENV['INSPECTOR'] == 'true',
+    headless: !ENV['HEADLESS']&.match?(/^(false|no|0)$/i)
+  )
 end
 
 Capybara.default_driver = :rack_test
