@@ -40,3 +40,4 @@
 /coverage/
 
 /node_modules/
+/spec/examples.txt
