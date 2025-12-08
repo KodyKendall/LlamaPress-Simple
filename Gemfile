@@ -66,6 +66,7 @@ group :test do
   gem "prop_check"
   gem "pact"
   gem "rspec-snapshot", require: false
+  gem "shoulda-matchers", "~> 6.0"
 end
 
 gem "llama_bot_rails", "~> 0.1.16"

@@ -11,8 +11,8 @@ RSpec.describe "Users", type: :system do
   }
 
   before do
-    # Use rack_test driver (no JavaScript support, but no browser needed)
-    driven_by(:rack_test)
+    # Use Cuprite driver for real browser testing with Chromium
+    driven_by(:cuprite)
     sign_in user
   end
 
@@ -36,9 +36,8 @@ RSpec.describe "Users", type: :system do
   end
 
   describe "destroying a user" do
-    # Skip this test as it requires JavaScript (accept_confirm)
-    # To run this test, you'd need Chrome/Chromium installed
-    xit "successfully destroys the user", js: true do
+    # Now with Chromium installed, this test will work
+    it "successfully destroys the user", js: true do
       visit user_url(user)
 
       accept_confirm do

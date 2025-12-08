@@ -8,15 +8,18 @@ services:
     tty: true             # <-- attaches terminal output
     env_file:
       - .env
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails db:prepare && bundle exec rails s -b '0.0.0.0'"
-    # command: tail -f /dev/null
-    platform: linux/amd64       # ← tells Compose “run this container as amd64 under QEMU”
+    # command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails db:prepare && bundle exec rails s -b '0.0.0.0'"
+    command: tail -f /dev/null
+    platform: linux/amd64       # ← tells Compose "run this container as amd64 under QEMU"
     volumes:
-      - .:/rails
-      # - bundle_cache:/usr/local/bundle  # Persist gems across container restarts
-    #   - ./app:/rails/app:delegated
-    #   - ./config/routes.rb:/rails/config/routes.rb:delegated    # mount just one file
-    #   - ./db:/rails/db:delegated                               # mount entire db folder
+      # Mount only application code directories (NOT Gemfile/Gemfile.lock or vendor/)
+      - ./app:/rails/app:delegated
+      - ./config:/rails/config:delegated
+      - ./db:/rails/db:delegated
+      - ./lib:/rails/lib:delegated
+      - ./spec:/rails/spec:delegated
+      - ./public:/rails/public:delegated
+      # DO NOT mount: Gemfile, Gemfile.lock, vendor/, or entire root directory
     ports:
       - "3000:3000"
     networks:
