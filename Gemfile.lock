@@ -513,7 +513,7 @@ GEM
     string_pattern (2.3.0)
       regexp_parser (~> 2.5, >= 2.5.0)
     stringio (3.1.7)
-    stripe (15.5.0)
+    stripe (17.1.0)
     tailwindcss-rails (4.3.0)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
@@ -606,7 +606,7 @@ DEPENDENCIES
   simplecov
   sprockets-rails
   stimulus-rails
-  stripe (~> 15.5)
+  stripe (~> 17.1)
   tailwindcss-rails
   turbo-rails
   twilio-ruby (~> 7.6)
