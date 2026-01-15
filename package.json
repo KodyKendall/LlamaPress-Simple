@@ -10,6 +10,9 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage"
   },
+  "dependencies": {
+    "puppeteer": "^23.0.0"
+  },
   "devDependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@testing-library/dom": "^10.4.0",

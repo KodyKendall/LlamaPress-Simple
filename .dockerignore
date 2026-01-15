@@ -46,3 +46,6 @@
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
+
+# Ignore vendor gems (keep vendor/javascript for importmap)
+/vendor/RailsPlanetarium

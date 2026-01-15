@@ -8,11 +8,11 @@ services:
     tty: true             # <-- attaches terminal output
     env_file:
       - .env
-    # command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails db:prepare && bundle exec rails s -b '0.0.0.0'"
-    command: tail -f /dev/null
-    platform: linux/amd64       # ← tells Compose "run this container as amd64 under QEMU"
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails db:prepare && bundle exec rails s -b '0.0.0.0'"
+    # command: tail -f /dev/null  # uncomment for debugging with byebug
+    # platform: linux/amd64  # only enable if you need to match production arch
     volumes:
-      # Mount only application code directories (NOT Gemfile/Gemfile.lock or vendor/)
+      # Mount application code directories for hot-reloading
       - ./app:/rails/app:delegated
       - ./config:/rails/config:delegated
       - ./db:/rails/db:delegated
@@ -35,7 +35,7 @@ services:
       - redis
 
   llamabot:
-    image: kody06/llamabot:0.2.19-memory-efficienta
+    image: kody06/llamabot:0.3.3o
     # build: 
     #   context: LlamaBot
     #   dockerfile: Dockerfile
@@ -49,6 +49,7 @@ services:
       - .env
     environment:
       - DB_URI=postgres://user:password@db:5432/llamapress
+      - AUTH_DB_URI=postgres://user:password@db:5432/llamabot
       - GIT_DISCOVERY_ACROSS_FILESYSTEM=1
     command: bash -c "python init_pg_checkpointer.py --uri $$DB_URI && uvicorn main:app --host 0.0.0.0 --port 8000"
     # command: >
@@ -107,8 +108,6 @@ services:
 volumes:
   postgres_data:
   redis_data:
-  bootsnap_cache: 
-  rails_app:
 
 # Declare the external network
 networks:
