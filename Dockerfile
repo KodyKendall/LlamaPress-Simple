@@ -1,25 +1,14 @@
 # syntax=docker/dockerfile:1.4
-# ARG TARGETPLATFORM=linux/amd64
-FROM --platform=${TARGETPLATFORM} ruby@sha256:bceec7582aaa80630bb51a04e2df3af658e64c0640c174371776928ad3bd57b4
+ARG TARGETPLATFORM
 
-# freeze snapshot
-RUN rm -f /etc/apt/sources.list /etc/apt/sources.list.d/* \
- && echo "deb [trusted=yes] https://snapshot.debian.org/archive/debian/20240701T000000Z bookworm main contrib non-free" \
-    > /etc/apt/sources.list
+# Use standard ruby image
+# When building locally: builds for native arch
+# When pushing with buildx --platform: builds for specified platforms
+FROM ruby:3.3-bookworm
 
-# anti-cache hack for Mac apple silicon
-RUN printf 'Acquire::http::Pipeline-Depth "0";\nAcquire::http::No-Cache "true";\nAcquire::BrokenProxy "true";\n' \
-    > /etc/apt/apt.conf.d/99fixbadproxy
-
-# clean slate
-RUN rm -rf /var/lib/apt/lists/* \
- && apt-get clean \
- && apt-get update -o Acquire::CompressionTypes::Order::=gz
-
-# build dependencies with cache mounts
-RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt \
-    --mount=type=cache,id=apt-lists,target=/var/lib/apt/lists \
-    apt-get update -qq && \
+# Use standard Debian repos (MUCH faster than snapshot.debian.org)
+# This is the biggest speed improvement - snapshot repos are extremely slow
+RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       build-essential \
       git \
@@ -52,12 +41,16 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt \
       libxfixes3 \
       libxkbcommon0 \
       libxrandr2 \
-      xdg-utils \
-      --fix-missing && \
-    apt-get clean
+      xdg-utils && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Configure npm
 RUN npm config set fund false --global
+
+# Tell Puppeteer to use system Chromium instead of downloading its own
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 WORKDIR /rails
 
@@ -70,13 +63,17 @@ ENV RAILS_ENV="development" \
 COPY Gemfile Gemfile.lock ./
 COPY vendor/ vendor/
 
-# Install gems directly into the image
-RUN bundle install && \
+# Install gems with cache mount (speeds up rebuilds significantly)
+RUN --mount=type=cache,id=bundler,target=/usr/local/bundle/cache \
+    bundle install && \
     bundle clean --force
 
 # Copy package files for Node.js dependencies
 COPY package.json package*.json ./
-RUN npm ci 2>/dev/null || npm install
+
+# Install npm packages with cache mount
+RUN --mount=type=cache,id=npm,target=/root/.npm \
+    npm ci 2>/dev/null || npm install
 
 # Create directories that might be needed
 RUN mkdir -p tmp/cache/bootsnap tmp/pids log
@@ -90,5 +87,6 @@ EXPOSE 3000
 # Prepare database and start the Rails server
 CMD ["sh", "-c", "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"]
 
-#   docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64 --tag kody06/llamapress-simple:0.2.6a --push .
+#   docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64 --tag kody06/llamapress-simple:0.2.7 --push .
 # 
+

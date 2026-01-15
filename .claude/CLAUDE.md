@@ -1,0 +1,1 @@
+To access ruby, you must source ~/.zshrc then mise should activate.

@@ -70,8 +70,11 @@ group :test do
 end
 
 gem "llama_bot_rails", "~> 0.1.16"
+# gem "llama_bot_rails", path: "../../llama_bot_rails_symlink"  # for local dev
 
 gem "devise", "~> 4.9"
+
+gem "pundit", "~> 2.4"
 
 gem "dotenv-rails", "~> 3.1"
 
@@ -82,3 +85,5 @@ gem "stripe", "~> 15.5"
 gem "image_processing", "~> 1.14"
 
 gem "aws-sdk-s3"
+
+gem "grover"

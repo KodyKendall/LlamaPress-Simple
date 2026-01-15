@@ -1,0 +1,49 @@
+# syntax=docker/dockerfile:1.4
+# Lightweight dev Dockerfile - much faster builds
+FROM ruby:3.3-bookworm
+
+# Standard Debian repos (fast) instead of snapshot.debian.org (slow)
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+      build-essential \
+      git \
+      libpq-dev \
+      pkg-config \
+      curl \
+      postgresql-client \
+      nodejs \
+      npm && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Skip Chromium for dev - add back if you need system tests
+# For headless testing, consider using selenium/standalone-chrome container instead
+
+RUN npm config set fund false --global
+
+WORKDIR /rails
+
+ENV RAILS_ENV="development" \
+    BUNDLE_PATH="/usr/local/bundle" \
+    BOOTSNAP_CACHE_DIR="/rails/tmp/cache/bootsnap"
+
+# Copy dependency files
+COPY Gemfile Gemfile.lock ./
+COPY vendor/ vendor/
+
+# Install gems
+RUN bundle install
+
+# Copy package files
+COPY package.json package*.json ./
+RUN npm ci 2>/dev/null || npm install
+
+# Create required directories
+RUN mkdir -p tmp/cache/bootsnap tmp/pids log
+
+# Copy app code last for better caching
+COPY . .
+
+EXPOSE 3000
+
+CMD ["bash", "-c", "rm -f tmp/pids/server.pid && bundle exec rails db:prepare && bundle exec rails s -b 0.0.0.0"]

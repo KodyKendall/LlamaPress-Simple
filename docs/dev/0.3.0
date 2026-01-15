@@ -1,0 +1,3 @@
+0.3.0:
+    - Add Pundit for role based permissions
+    - Add Grover for easy PDF generation
