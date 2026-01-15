@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(docker compose exec:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(tree:*)",
+      "Bash(ruby -e:*)",
+      "Bash(docker compose restart:*)",
+      "Bash(docker compose:*)"
     ],
     "deny": [],
     "ask": []

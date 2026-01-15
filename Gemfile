@@ -87,3 +87,5 @@ gem "image_processing", "~> 1.14"
 gem "aws-sdk-s3"
 
 gem "grover"
+
+gem "roo", "~> 2.10"
