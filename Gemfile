@@ -69,8 +69,8 @@ group :test do
   gem "shoulda-matchers", "~> 6.0"
 end
 
-gem "llama_bot_rails", "~> 0.1.16"
-# gem "llama_bot_rails", path: "../../llama_bot_rails_symlink"  # for local dev
+# gem "llama_bot_rails", "~> 0.1.16"  # published gem
+gem "llama_bot_rails", path: "vendor/llama_bot_rails"
 
 gem "devise", "~> 4.9"
 

@@ -6,7 +6,13 @@
       "Bash(tree:*)",
       "Bash(ruby -e:*)",
       "Bash(docker compose restart:*)",
-      "Bash(docker compose:*)"
+      "Bash(docker compose:*)",
+      "Bash(readlink:*)",
+      "Bash(git submodule add:*)",
+      "Bash(cat:*)",
+      "Bash(ln:*)",
+      "Bash(git submodule:*)",
+      "Bash(docker run:*)"
     ],
     "deny": [],
     "ask": []

@@ -63,6 +63,9 @@ ENV RAILS_ENV="development" \
 COPY Gemfile Gemfile.lock ./
 COPY vendor/ vendor/
 
+# Remove .git files from submodules (they point to paths outside the build context)
+RUN find vendor -name ".git" -type f -delete
+
 # Install gems with cache mount (speeds up rebuilds significantly)
 RUN --mount=type=cache,id=bundler,target=/usr/local/bundle/cache \
     bundle install && \
@@ -87,6 +90,6 @@ EXPOSE 3000
 # Prepare database and start the Rails server
 CMD ["sh", "-c", "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"]
 
-#   docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64 --tag kody06/llamapress-simple:0.3.1 --push .
+#   docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64 --tag kody06/llamapress-simple:0.3.2 --push .
 # 
 
