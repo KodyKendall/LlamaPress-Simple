@@ -50,6 +50,10 @@ group :development, :test do
   gem "faker", "~> 3.5"
   gem "simplecov", require: false
   gem "byebug", "~> 12.0"
+
+  # HTML validity linting - prevents missing closing tags that break JS-driven UIs
+  gem "erb_lint", require: false
+  gem "better_html", require: false
 end
 
 group :development do

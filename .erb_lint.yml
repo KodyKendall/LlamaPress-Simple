@@ -1,0 +1,51 @@
+# ERB Lint configuration
+# Validates ERB templates for HTML correctness and safety
+# This catches missing closing tags that break JS-driven UIs (like SortableJS)
+#
+# POLICY: Invalid HTML is a build-breaking defect. If the DOM is wrong,
+# everything above it (Stimulus/SortableJS/etc.) is operating on a lie.
+
+EnableDefaultLinters: false
+
+linters:
+  # CRITICAL: Validates HTML tag structure - catches missing closing tags
+  ParserErrors:
+    enabled: true
+
+  # Catches HTML safety issues (XSS prevention)
+  # NOTE: Disabled for now - has many false positives in javascript_tag helpers
+  # Re-enable once you've addressed the .to_json warnings in layouts
+  ErbSafety:
+    enabled: false
+    better_html_config: .better_html.yml
+
+  # Disable style-focused linters (too noisy, not safety-related)
+  SelfClosingTag:
+    enabled: false
+
+  ExtraNewline:
+    enabled: false
+
+  FinalNewline:
+    enabled: false
+
+  TrailingWhitespace:
+    enabled: false
+
+  SpaceAroundErbTag:
+    enabled: false
+
+  ClosingErbTagIndent:
+    enabled: false
+
+  RightTrim:
+    enabled: false
+
+  RequireInputAutocomplete:
+    enabled: false
+
+  NoJavascriptTagHelper:
+    enabled: false
+
+# Files to lint
+glob: "app/views/**/*.{html,html.erb}"

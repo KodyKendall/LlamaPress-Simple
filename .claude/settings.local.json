@@ -12,7 +12,8 @@
       "Bash(cat:*)",
       "Bash(ln:*)",
       "Bash(git submodule:*)",
-      "Bash(docker run:*)"
+      "Bash(docker run:*)",
+      "Bash(docker rmi:*)"
     ],
     "deny": [],
     "ask": []

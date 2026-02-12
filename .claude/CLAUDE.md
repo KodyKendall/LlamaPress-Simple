@@ -136,6 +136,32 @@ docker compose exec llamapress npm test
 
 See `.claude/skills/test_execution.md` for detailed test documentation.
 
+## HTML Linting (ERB Lint)
+
+**Policy: Invalid HTML is a build-breaking defect.** If the DOM is wrong, everything above it (Stimulus/SortableJS/etc.) is operating on a lie.
+
+This repo includes `erb_lint` and `better_html` gems for validating ERB templates. The configuration (`.erb_lint.yml`) focuses on catching structural HTML errors like missing closing tags.
+
+### Running the Linter
+
+```bash
+# From Leonardo (or any client project using this base image)
+docker compose exec llamapress bundle exec erb_lint --lint-all
+
+# Lint specific files
+docker compose exec llamapress bundle exec erb_lint app/views/some_view.html.erb
+```
+
+### What It Catches
+
+- Missing closing `</div>` tags (the exact bug that caused the Tender Builder incident)
+- Mismatched opening/closing tags
+- Invalid HTML structure that would corrupt the DOM
+
+### CI Integration
+
+Client projects should add ERB lint to their CI workflow. See Leonardo's `.github/workflows/ci.yml` for an example.
+
 ## Related Projects
 
 - **Leonardo**: `/LLMPress/Leonardo` - Development template project

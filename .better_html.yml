@@ -1,0 +1,12 @@
+# BetterHTML configuration
+# Enforces safe and valid HTML in ERB templates
+# Used by erb_lint's ErbSafety linter
+
+# Allow single-quoted attribute values
+allow_single_quoted_attributes: false
+
+# Allow unquoted attribute values (stricter when false)
+allow_unquoted_attributes: false
+
+# Allowed script types in <script> tags
+javascript_safe_methods: []
