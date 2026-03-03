@@ -78,11 +78,26 @@ COPY package.json package*.json ./
 RUN --mount=type=cache,id=npm,target=/root/.npm \
     npm ci 2>/dev/null || npm install
 
-# Create directories that might be needed
-RUN mkdir -p tmp/cache/bootsnap tmp/pids log
-
 # Copy application code (this should be LAST to maximize cache hits)
 COPY . .
+
+# Fix file permissions - COPY preserves source permissions which may be restrictive
+# Ensure all config files are readable (fixes issues like grover.rb being 600)
+RUN chmod -R a+r /rails/config/
+
+# Ensure tmp and log directories are writable (fixes Mac permission issues baked into COPY)
+RUN rm -rf /rails/tmp/* /rails/log/* && \
+    mkdir -p /rails/tmp/cache/bootsnap /rails/tmp/pids /rails/tmp/sockets /rails/tmp/storage /rails/log && \
+    chmod -R 777 /rails/tmp /rails/log
+
+# Create non-root user and set ownership for Rails runtime directories
+# This prevents permission issues when files are created from the container
+# RUN groupadd --system --gid 1000 rails && \
+#     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
+#     chown -R rails:rails /rails/tmp /rails/log /rails/public /rails/db /rails/storage /rails/Gemfile.lock 2>/dev/null || true
+
+# Switch to non-root user
+# USER 1000:1000
 
 # Expose port 3000
 EXPOSE 3000
@@ -90,6 +105,6 @@ EXPOSE 3000
 # Prepare database and start the Rails server
 CMD ["sh", "-c", "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"]
 
-#   docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64 --tag kody06/llamapress-simple:0.3.5c --push .
+#   docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64 --tag kody06/llamapress-simple:0.3.5g --push .
 # 
 

@@ -78,6 +78,8 @@ gem "llama_bot_rails", path: "vendor/llama_bot_rails"
 
 gem "devise", "~> 4.9"
 
+gem "pretender"
+
 gem "pundit", "~> 2.4"
 
 gem "dotenv-rails", "~> 3.1"
@@ -93,3 +95,5 @@ gem "aws-sdk-s3"
 gem "grover"
 
 gem "roo", "~> 2.10"
+
+gem "pagy", "~> 9.0"

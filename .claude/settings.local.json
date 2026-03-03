@@ -13,7 +13,9 @@
       "Bash(ln:*)",
       "Bash(git submodule:*)",
       "Bash(docker run:*)",
-      "Bash(docker rmi:*)"
+      "Bash(docker rmi:*)",
+      "Bash(docker system:*)",
+      "Bash(docker images:*)"
     ],
     "deny": [],
     "ask": []
