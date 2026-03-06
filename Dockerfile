@@ -82,8 +82,10 @@ RUN --mount=type=cache,id=npm,target=/root/.npm \
 COPY . .
 
 # Fix file permissions - COPY preserves source permissions which may be restrictive
-# Ensure all config files are readable (fixes issues like grover.rb being 600)
-RUN chmod -R a+r /rails/config/
+# Some files may have 600 (owner-only) permissions from Mac umask settings
+# This ensures all files are readable and directories are traversable by any user
+RUN find /rails -type f -exec chmod a+r {} \; && \
+    find /rails -type d -exec chmod a+rx {} \;
 
 # Ensure tmp and log directories are writable (fixes Mac permission issues baked into COPY)
 RUN rm -rf /rails/tmp/* /rails/log/* && \
@@ -105,6 +107,6 @@ EXPOSE 3000
 # Prepare database and start the Rails server
 CMD ["sh", "-c", "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"]
 
-#   docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64 --tag kody06/llamapress-simple:0.4.0 --push .
+#   docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64 --tag kody06/llamapress-simple:0.4.0a --push .
 # 
 
