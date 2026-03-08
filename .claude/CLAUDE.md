@@ -162,6 +162,35 @@ docker compose exec llamapress bundle exec erb_lint app/views/some_view.html.erb
 
 Client projects should add ERB lint to their CI workflow. See Leonardo's `.github/workflows/ci.yml` for an example.
 
+## Fixing Permission Errors
+
+If client projects see `Permission denied` or `EACCES` errors inside the container:
+
+### For container-created directories (tmp/, coverage/, log/)
+
+```bash
+docker compose exec -u root llamapress rm -rf /rails/tmp/cache /rails/coverage
+docker compose exec -u root llamapress mkdir -p /rails/tmp/cache /rails/coverage
+docker compose exec -u root llamapress chmod -R 777 /rails/tmp/cache /rails/coverage
+```
+
+### For source files baked into the image
+
+If vendor gems or config files have bad permissions, the fix must happen here in LlamaPress-Simple:
+
+```bash
+# Fix locally (in this repo)
+find . -type f ! -path "./.git/*" ! -path "./node_modules/*" -perm 600 -exec chmod 644 {} \;
+find . -type d ! -path "./.git/*" ! -path "./node_modules/*" -perm 700 -exec chmod 755 {} \;
+
+# Then rebuild and push the image
+docker buildx build --file Dockerfile \
+  --platform linux/amd64,linux/arm64 \
+  --tag kody06/llamapress-simple:X.X.X --push .
+```
+
+The Dockerfile also has a safety net that fixes permissions at build time (`find /rails -type f -exec chmod a+r`).
+
 ## Related Projects
 
 - **Leonardo**: `/LLMPress/Leonardo` - Development template project
