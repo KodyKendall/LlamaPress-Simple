@@ -4,6 +4,16 @@ PATH
     rails_planetarium (0.1.0)
       rails (>= 7.0)
 
+PATH
+  remote: vendor/llama_bot_rails
+  specs:
+    llama_bot_rails (0.1.16)
+      actioncable (>= 6.0, < 9.0)
+      async
+      async-http
+      async-websocket
+      rails (>= 6.0, < 9.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -130,6 +140,13 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.20)
     benchmark (0.5.0)
+    better_html (2.2.0)
+      actionview (>= 7.0)
+      activesupport (>= 7.0)
+      ast (~> 2.0)
+      erubi (~> 1.4)
+      parser (>= 2.4)
+      smart_properties
     bigdecimal (3.3.1)
     bindex (0.8.1)
     bootsnap (1.18.6)
@@ -181,6 +198,13 @@ GEM
       railties (>= 6.1)
     drb (2.2.3)
     erb (6.0.0)
+    erb_lint (0.9.0)
+      activesupport
+      better_html (>= 2.0.1)
+      parser (>= 2.7.1.4)
+      rainbow
+      rubocop (>= 1)
+      smart_properties
     erubi (1.13.1)
     expgen (0.1.1)
       parslet
@@ -218,6 +242,8 @@ GEM
     find_a_port (1.0.1)
     globalid (1.3.0)
       activesupport (>= 6.1)
+    grover (1.2.8)
+      nokogiri (~> 1)
     http-accept (1.7.0)
     http-cookie (1.0.8)
       domain_name (~> 0.5)
@@ -249,12 +275,6 @@ GEM
       base64
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
-    llama_bot_rails (0.1.16)
-      actioncable (>= 6.0, < 9.0)
-      async
-      async-http
-      async-websocket
-      rails (>= 6.0, < 9.0)
     logger (1.7.0)
     loofah (2.24.1)
       crass (~> 1.0.2)
@@ -347,6 +367,10 @@ GEM
       jsonpath (~> 1.0)
       rainbow (~> 3.1.1)
       string_pattern (~> 2.0)
+    pagy (9.4.0)
+    paper_trail (15.2.0)
+      activerecord (>= 6.1)
+      request_store (~> 1.4)
     parallel (1.27.0)
     parser (3.3.9.0)
       ast (~> 2.4.1)
@@ -364,6 +388,8 @@ GEM
       rest-client
     pp (0.6.3)
       prettyprint
+    pretender (0.6.0)
+      actionpack (>= 7.1)
     prettyprint (0.2.0)
     prism (1.4.0)
     prop_check (1.0.2)
@@ -391,6 +417,8 @@ GEM
       activesupport (>= 3.0.0)
     racc (1.8.1)
     rack (3.2.4)
+    rack-attack (6.8.0)
+      rack (>= 1.0, < 4)
     rack-proxy (0.7.7)
       rack
     rack-session (2.1.1)
@@ -440,6 +468,8 @@ GEM
     regexp_parser (2.11.2)
     reline (0.6.3)
       io-console (~> 0.5)
+    request_store (1.7.0)
+      rack (>= 1.4)
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
@@ -448,6 +478,9 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    roo (2.10.1)
+      nokogiri (~> 1)
+      rubyzip (>= 1.3.0, < 3.0.0)
     rspec (3.13.2)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -507,6 +540,7 @@ GEM
     ruby-vips (2.2.5)
       ffi (~> 1.12)
       logger
+    rubyzip (2.4.1)
     securerandom (0.4.1)
     shoulda-matchers (6.5.0)
       activesupport (>= 5.2.0)
@@ -516,6 +550,7 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.13.2)
     simplecov_json_formatter (0.1.4)
+    smart_properties (1.17.0)
     sorbet-runtime (0.5.12443)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
@@ -593,6 +628,7 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk-s3
+  better_html
   bootsnap
   brakeman
   byebug (~> 12.0)
@@ -602,21 +638,28 @@ DEPENDENCIES
   debug
   devise (~> 4.9)
   dotenv-rails (~> 3.1)
+  erb_lint
   factory_bot_rails (~> 6.4)
   faker (~> 3.5)
+  grover
   image_processing (~> 1.14)
   importmap-rails
   jbuilder
-  llama_bot_rails (~> 0.1.16)
+  llama_bot_rails!
   mutant-rspec
   pact
+  pagy (~> 9.0)
+  paper_trail (~> 15.2)
   pg (~> 1.1)
   plaid-ruby (~> 0.1.2)
+  pretender
   prop_check
   puma (>= 5.0)
   pundit (~> 2.4)
+  rack-attack (~> 6.7)
   rails (~> 7.2.2, >= 7.2.2.1)
   rails_planetarium!
+  roo (~> 2.10)
   rspec-rails (~> 7.0)
   rspec-snapshot
   rubocop

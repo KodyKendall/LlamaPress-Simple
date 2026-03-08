@@ -15,7 +15,9 @@
       "Bash(docker run:*)",
       "Bash(docker rmi:*)",
       "Bash(docker system:*)",
-      "Bash(docker images:*)"
+      "Bash(docker images:*)",
+      "Bash(bundle lock:*)",
+      "Bash(docker ps:*)"
     ],
     "deny": [],
     "ask": []

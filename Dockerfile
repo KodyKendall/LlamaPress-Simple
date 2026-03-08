@@ -107,6 +107,6 @@ EXPOSE 3000
 # Prepare database and start the Rails server
 CMD ["sh", "-c", "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"]
 
-#   docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64 --tag kody06/llamapress-simple:0.4.0a --push .
+#   docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64 --tag kody06/llamapress-simple:0.4.0b --push .
 # 
 

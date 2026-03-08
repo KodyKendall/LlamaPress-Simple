@@ -75,6 +75,7 @@ end
 
 # gem "llama_bot_rails", "~> 0.1.16"  # published gem
 gem "llama_bot_rails", path: "vendor/llama_bot_rails"
+# gem "rails_planetarium", path: "vendor/RailsPlanetarium"
 
 gem "devise", "~> 4.9"
 
@@ -97,3 +98,6 @@ gem "grover"
 gem "roo", "~> 2.10"
 
 gem "pagy", "~> 9.0"
+
+gem "rack-attack", "~> 6.7"
+gem "paper_trail", "~> 15.2"
